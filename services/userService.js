@@ -25,6 +25,14 @@ const userService = {
     },
     hashPassword( password ){
         return bcrypt.hashSync( password, 10 )
+    },
+    async update(id, update){
+        try {
+            const user = await User.findOneAndUpdate( {_id:id}, update, {new:true} )
+            return user
+        } catch (error) {
+            console.log(error)
+        }
     }
 }
 
