@@ -13,7 +13,7 @@ const moviesService = {
 
     async getById( id ){
         try {
-            const movie = await Movies.find( {_id: id} )
+            const movie = await Movies.findById( id )
             return movie
         } catch (error) {
             throw new Error(error)
@@ -35,6 +35,30 @@ const moviesService = {
             const newMovie = await Movies.create( data )
             return newMovie
         } catch (error) {
+            throw new Error(error)
+        }
+    },
+
+    async newComment( { id, comment, user, name } ){
+        try {
+            const update = {  $push: {comments: { comment ,user, name } } }
+            const movie = await Movies.findOneAndUpdate( {_id:id}, update, {new:true} )
+            return movie
+        }catch(error){
+            throw new Error(error)
+        }
+    },
+
+    async deleteComment( { MovieID, userID, commentID} ){
+        try{
+            const movie = await Movies.findById( MovieID )
+             let aux = movie.comments.find( comment => comment._id == `${commentID}` && comment.user == `${userID}` )
+             if( aux ){
+                 movie.comments = movie.comments.filter( coment => coment._id != commentID )
+                 await movie.save()
+             }
+            return movie
+        }catch(error){
             throw new Error(error)
         }
     },

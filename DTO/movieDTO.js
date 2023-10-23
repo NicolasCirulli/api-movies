@@ -16,7 +16,7 @@ const movieDTO = ( obj ) => {
                 runtime: obj.runtime,
                 status : obj.status,
                 tagline : obj.tagline,
-                budget : obj.budget    
+                budget : obj.budget 
         }
 }
 
