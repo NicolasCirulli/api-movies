@@ -16,6 +16,11 @@ const movieSchema = new mongoose.Schema({
   status: { type: String },
   tagline: { type: String },
   budget: { type: Number },
+  comments : [ {
+      comment : { type : String },
+      user : { type: mongoose.Schema.Types.ObjectId, ref : 'User' },
+      name : { type : String }
+   } ]
 });
 
 const Movie = mongoose.model('Movie', movieSchema);

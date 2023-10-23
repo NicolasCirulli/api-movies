@@ -43,7 +43,7 @@ export const sendEmail = async (email, code) => {
             if( err ){
                 console.log(err)
             }else{
-                console.log('Email enviado con exito')
+                console.log('Email send')
             }
         } )
     } catch (error) {
