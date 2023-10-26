@@ -4,7 +4,7 @@ import authRouter from "./authRouter.js";
 import commentRouter from "./commentRouter.js";
 const indexRouter = express.Router()
 
-indexRouter.get( "/", (req, res) => res.send( "api amazin" ) )
+indexRouter.get( "/", (req, res) => res.send( "Api Movies" ) )
 
 
 indexRouter.use( "/movies", moviesRouter )
