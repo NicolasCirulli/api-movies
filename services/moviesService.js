@@ -57,7 +57,7 @@ const moviesService = {
                  movie.comments = movie.comments.filter( coment => coment._id != commentID )
                  await movie.save()
              }
-            return movie
+            return movie 
         }catch(error){
             throw new Error(error)
         }
