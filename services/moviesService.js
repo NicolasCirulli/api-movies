@@ -2,10 +2,42 @@ import { MOVIES } from "../data/allMovies.js"
 import Movies from '../models/moviesModel.js'
 const moviesService = {
 
-    async getAllMovies(){
+    async getAllMovies( querys ){
         try {
-            const movies = await Movies.find()
-            return movies
+            const query = ['title'].reduce( ( query, key ) => {
+                if( querys[key] ) query[key] = { $regex: querys[key] , $options: 'i'}
+                return query
+            }, {} )
+            let movies = await Movies.find(query)
+            const response = {}
+            
+            if( querys.genre ){
+                movies = movies.filter( movie => movie.genres.some( genre => genre.toLowerCase() == querys.genre.toLowerCase() ) )
+            }
+            if( querys.page && querys.page > 0 ){
+                response.totalCount = movies.length
+                response.totalPages = Math.ceil( response.totalCount / 20 )
+                response.currentPage = Number(querys.page)
+                const start = ( querys.page - 1 ) * 20
+                movies = movies.splice( start, 20 )
+                if( movies.length == 0 ){
+                    response.status = 400
+                    response.message = 'There is nothing here'
+                }
+            }
+            if( querys.sort && [ 'title', 'popularity', 'release_date', 'vote_average', 'budget', 'revenue' ].includes( querys.sort ) ){
+                movies.sort( (a,b) => {
+                    if( a[querys.sort] > b[querys.sort] ) return 1
+                    if( a[querys.sort] < b[querys.sort] ) return -1
+                    return 0
+                } )
+            }
+            if( querys.order == 'des' ){
+                movies.reverse()
+            }
+            response.count = movies.length
+            response.movies = movies
+            return response
         } catch (error) {
             throw new Error(error)
         }

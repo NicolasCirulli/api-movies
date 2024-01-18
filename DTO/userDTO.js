@@ -1,7 +1,8 @@
 const userDTO = ( obj ) => {
         return {
                name : obj.name,
-               email : obj.email
+               email : obj.email,
+               api_key: obj.apiKey || ""
         }
 }
 
