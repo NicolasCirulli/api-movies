@@ -5,14 +5,13 @@ import { MOVIES } from '../data/allMovies.js'
 const moviesController = {
     async getMovies(req, res){ 
         try {
-            const movies = await moviesService.getAllMovies()
-            const response = {}
-            const moviesResponse = movies.map( movieDTO )
+            const response = await moviesService.getAllMovies(req.query)
+            const moviesResponse = response.movies.map( movieDTO )
             response.movies = moviesResponse
-            response.count = moviesResponse.length
-            res.status( 200 ).json( response )
+            res.status( response.status || 200 ).json( response )
         } catch (error) {
-            res.status( 500 ).json( {error:error} )
+            console.log( error )
+            res.status( 500 ).json( error )
         }
     },
 
